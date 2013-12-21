@@ -61,6 +61,7 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
         fileChooser.setFileHidingEnabled(true);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("GPS Simulator - ISO Raid Project 2014");
         setResizable(false);
 
         gpsModel.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Nomadic" }));
