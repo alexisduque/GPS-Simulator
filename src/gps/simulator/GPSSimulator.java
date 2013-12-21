@@ -1,4 +1,5 @@
 /*
+
  * JAVA GPS Simulator
  * ISO Raid Project
  * 
@@ -19,10 +20,28 @@ public class GPSSimulator {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        Nomadic gpsTracker = new Nomadic("192.168.0.11", 42400, 15, 2000000001, "D:\\gps_collect\\perl\\jeu_essai_positions.txt");
-        gpsTracker.Run();
         
+        if (args.length  == 5 )
+        {
+            System.out.print("Param : ");
+            for (String arg : args )
+            {
+                System.out.print(arg + ", ");
+            }
+            System.out.println();
+            Nomadic gpsTracker = new Nomadic(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[4]);
+            gpsTracker.Run();
+
+        } else if (args.length  < 1) {
+            System.out.println("Use default value : 192.168.0.11, 42400, 15, D:\\gps_collect\\perl\\jeu_essai_positions.txt");
+            Nomadic gpsTracker = new Nomadic("192.168.0.11", 42400, 15, 2000000001, "D:\\gps_collect\\perl\\jeu_essai_positions.txt");
+            gpsTracker.Run();
+            
+        } else if (args[0]  == "help") {
+            System.out.println("Usage : gpssimulator ip port period ime file");
+            System.exit(0);
+        }   
+         
     }
     
 }
