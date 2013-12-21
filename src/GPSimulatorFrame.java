@@ -1,5 +1,9 @@
 
 import gps.simulator.Nomadic;
+import java.awt.Color;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 /*
  * JAVA GPS Simulator
@@ -10,10 +14,6 @@ import gps.simulator.Nomadic;
  *
  */
 
-/**
- *
- * @author Alex
- */
 import javax.swing.*;
 
 public class GPSimulatorFrame extends javax.swing.JFrame {
@@ -23,6 +23,7 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
      */
     public GPSimulatorFrame() {
         initComponents();
+        initConsole();
     }
 
     /**
@@ -35,22 +36,29 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jFormattedTextField2 = new javax.swing.JFormattedTextField();
+        fileChooser = new javax.swing.JFileChooser();
         gpsModel = new javax.swing.JComboBox();
         buttonStart = new javax.swing.JButton();
         buttonStop = new javax.swing.JButton();
         serverIP = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        console = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        sendPeriod = new javax.swing.JTextField();
         buttonQuit = new javax.swing.JButton();
         serverPort = new javax.swing.JFormattedTextField();
+        jLabel6 = new javax.swing.JLabel();
+        fileText = new javax.swing.JTextField();
+        sendPeriod = new javax.swing.JFormattedTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        console = new javax.swing.JTextPane();
 
         jFormattedTextField2.setText("jFormattedTextField2");
+
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.setFileFilter(new OnlyTextFilter());
+        fileChooser.setFileHidingEnabled(true);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -73,15 +81,17 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
 
         serverIP.setText("192.168.0.11");
         serverIP.setToolTipText("");
+        serverIP.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                serverIPInputMethodTextChanged(evt);
+            }
+        });
 
         jLabel1.setText("GPS model");
 
         jLabel2.setText("Server IP");
-
-        console.setEditable(false);
-        console.setColumns(20);
-        console.setRows(5);
-        jScrollPane1.setViewportView(console);
 
         jLabel3.setText("Server Port");
 
@@ -89,9 +99,6 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
         jLabel4.setText("GPS Simulator - ISO Raid Project");
 
         jLabel5.setText("Period (sec)");
-
-        sendPeriod.setText("15");
-        sendPeriod.setToolTipText("");
 
         buttonQuit.setText("Exit");
         buttonQuit.addActionListener(new java.awt.event.ActionListener() {
@@ -108,6 +115,35 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
                 serverPortActionPerformed(evt);
             }
         });
+        serverPort.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                serverPortInputMethodTextChanged(evt);
+            }
+        });
+
+        jLabel6.setText("Positions");
+
+        fileText.setEditable(false);
+        fileText.setText("jeu_essai_positions.txt");
+        fileText.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                fileTextMouseClicked(evt);
+            }
+        });
+
+        sendPeriod.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###"))));
+        sendPeriod.setText("15");
+        sendPeriod.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                sendPeriodInputMethodTextChanged(evt);
+            }
+        });
+
+        jScrollPane2.setViewportView(console);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -123,36 +159,44 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1)
                                     .addComponent(jLabel2)
-                                    .addComponent(jLabel3))
-                                .addGap(20, 20, 20))
+                                    .addComponent(jLabel6))
+                                .addGap(25, 25, 25))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(buttonStart))
+                                    .addComponent(buttonStart, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addGap(18, 18, 18)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(serverIP)
-                            .addComponent(gpsModel, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(fileText, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(buttonStop, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(sendPeriod, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(serverPort, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                                .addComponent(buttonQuit, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel4))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(gpsModel, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(serverIP, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(sendPeriod, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(buttonStop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(serverPort))
+                                        .addGap(18, 18, 18)
+                                        .addComponent(buttonQuit, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addContainerGap(309, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(8, 8, 8)
+                .addComponent(jLabel4)
+                .addGap(13, 13, 13)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addComponent(jLabel4)
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(gpsModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1))
@@ -161,61 +205,103 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
                             .addComponent(serverIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(serverPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(serverPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(fileText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
                             .addComponent(sendPeriod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(buttonStart)
                             .addComponent(buttonStop)
-                            .addComponent(buttonQuit)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addComponent(jScrollPane1)))
+                            .addComponent(buttonQuit)
+                            .addComponent(buttonStart))
+                        .addGap(0, 1, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2))
                 .addContainerGap())
         );
-
-        sendPeriod.getAccessibleContext().setAccessibleName("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonQuitActionPerformed
 
-		System.exit(0);
+        System.exit(0);
     }//GEN-LAST:event_buttonQuitActionPerformed
 
     private void buttonStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonStartActionPerformed
         // Start Simulator
-        console.setText("");
-        buttonStart.setEnabled(false);
-        buttonStop.setEnabled(true);
+        //buttonStart.setEnabled(false);
+        //buttonStop.setEnabled(true);
         final String ip = serverIP.getText();
-        final int port = Integer.parseInt( serverPort.getText());
-        final int per = Integer.parseInt( sendPeriod.getText());
-        
-        new Thread(new Runnable() {
-            public void run() {
-                Nomadic gpsTracker = new Nomadic(ip, port, 15, 2000000001, "D:\\gps_collect\\perl\\jeu_essai_positions.txt");
-                gpsTracker.Run();
-            }
-        }).start();
+        final String fileT = fileText.getText();
+        final int port = Integer.parseInt(serverPort.getText());
+        final int per = Integer.parseInt(sendPeriod.getText());
+
+        if (gpsTracker == null) {
+            gpsTracker = new Nomadic(ip, port, per, 2000000001, fileT);
+        }
+
+        (new Thread(gpsTracker)).start();
+
     }//GEN-LAST:event_buttonStartActionPerformed
 
     private void buttonStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonStopActionPerformed
         // TODO add your handling code here:
-        buttonStart.setEnabled(true);
-        buttonStop.setEnabled(false);
-       
+        //buttonStart.setEnabled(true);
+        //buttonStop.setEnabled(false);
+        try {
+            gpsTracker.stopGPS();
+            gpsTracker = null;
+        } catch (Exception e) {
+            System.err.println("No GPS Started");
+        }
     }//GEN-LAST:event_buttonStopActionPerformed
 
     private void serverPortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverPortActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_serverPortActionPerformed
+
+    private void fileTextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fileTextMouseClicked
+        int returnVal = fileChooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            try {
+                FileReader reader = new FileReader(file.getAbsolutePath());
+                console.setText(file.getAbsolutePath());
+                fileText.setText(file.getAbsolutePath());
+                gpsTracker = null;
+            } catch (IOException ex) {
+                System.err.println("problem accessing file" + file.getAbsolutePath());
+            }
+        } else {
+            System.out.println("File access cancelled by user.");
+        }
+    }//GEN-LAST:event_fileTextMouseClicked
+
+    private void serverPortInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_serverPortInputMethodTextChanged
+        gpsTracker = null;
+    }//GEN-LAST:event_serverPortInputMethodTextChanged
+
+    private void serverIPInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_serverIPInputMethodTextChanged
+        gpsTracker = null;
+    }//GEN-LAST:event_serverIPInputMethodTextChanged
+
+    private void sendPeriodInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_sendPeriodInputMethodTextChanged
+        gpsTracker = null;
+    }//GEN-LAST:event_sendPeriodInputMethodTextChanged
+
+    private void initConsole() {
+        MessageConsole mc = new MessageConsole(console);
+        mc.redirectOut();
+        mc.redirectErr(Color.RED, null);
+        mc.setMessageLines(12);
+    }
 
     /**
      * @param args the command line arguments
@@ -251,14 +337,31 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
             }
         });
     }
-    
-    
 
+    class OnlyTextFilter extends javax.swing.filechooser.FileFilter {
+
+        @Override
+        public boolean accept(File file) {
+            // Allow only directories, or files with ".txt" extension
+            return file.isDirectory() || file.getAbsolutePath().endsWith(".txt");
+        }
+
+        @Override
+        public String getDescription() {
+            // This description will be displayed in the dialog,
+            // hard-coded = ugly, should be done via I18N
+            return "Text documents (*.txt)";
+        }
+    }
+
+    private Nomadic gpsTracker;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonQuit;
     private javax.swing.JButton buttonStart;
     private javax.swing.JButton buttonStop;
-    private javax.swing.JTextArea console;
+    private javax.swing.JTextPane console;
+    private javax.swing.JFileChooser fileChooser;
+    private javax.swing.JTextField fileText;
     private javax.swing.JComboBox gpsModel;
     private javax.swing.JFormattedTextField jFormattedTextField2;
     private javax.swing.JLabel jLabel1;
@@ -266,8 +369,9 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField sendPeriod;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JFormattedTextField sendPeriod;
     private javax.swing.JTextField serverIP;
     private javax.swing.JFormattedTextField serverPort;
     // End of variables declaration//GEN-END:variables

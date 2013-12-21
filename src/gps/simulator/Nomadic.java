@@ -18,12 +18,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-
 /**
  *
  * @author Alex
  */
-public class Nomadic {
+public class Nomadic implements Runnable {
+
     private String timeZone;
     DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
     private int sockPort;
@@ -31,135 +31,116 @@ public class Nomadic {
     private int sendPeriod;
     private int imei;
     private String fileGPS;
-    
-    public Nomadic () {
+    private boolean stopGPS;
+
+    public Nomadic() {
         this.sockAddress = "localhost";
         this.sockPort = 42400;
         this.sendPeriod = 20;
         this.imei = 2000000001;
         this.fileGPS = "D:\\gps_collect\\perl\\jeu_essai_positions.txt";
+        this.stopGPS = false;
     }
-    
-    public Nomadic(String address, int port, int period, int code, String file){
+
+    public Nomadic(String address, int port, int period, int code, String file) {
         this.sockAddress = address;
         this.sockPort = port;
         this.sendPeriod = period;
         this.imei = code;
         this.fileGPS = file;
+        this.stopGPS = false;
     }
-    
-    public void Run() {
-        
+
+    public void run() {
+
         timeZone = "Europe/Paris";
 
         // Trame NS90 with 9 parameters
         String tram0 = "356307040983040,20120703172143,4.735957,44.533772,0,270,227,4,2";
         String trame4 = "2000000001,20120630071416,4.882276,45.780171,0,0,0,5,2,0.0,0,0.01,0.01,0";
-        
+
         //Try to read position file
         try {
             Scanner scanner = new Scanner(new FileReader(fileGPS));
             String line = null;
-            while (scanner.hasNextLine()) {
-                
-                Date date = new Date();
-                //Format and print Date
-                TimeZone.setDefault(TimeZone.getTimeZone(timeZone));
-                String dateString = dateFormat.format(date);
-                System.out.println(dateString);
-                
-                line = scanner.nextLine();
-                String[] splits = line.split(",");
-                System.out.println("Param number : " + splits.length);
-                String gpsTrame = this.imei + "," + dateString + "," + splits[2] 
-                + "," + splits[3] + "," + splits[4] + "," + splits[5] + "," 
-                        + splits[6] + "," + splits[7]  + "," + splits[8] + "\r\n";
-                
-         // Try to connect to server
-                try {
+            try {
+                while (scanner.hasNextLine()) {
+                        testStop();
+                        Date date = new Date();
+                        //Format and print Date
+                        TimeZone.setDefault(TimeZone.getTimeZone(timeZone));
+                        String dateString = dateFormat.format(date);
+                        System.out.println(dateString);
 
-                    Socket socket = new Socket(sockAddress, sockPort);
-                    System.out.println("**** Connexion start ****");
+                        line = scanner.nextLine();
+                        String[] splits = line.split(",");
+                        System.out.println("Param number : " + splits.length);
+                        String gpsTrame = this.imei + "," + dateString + "," + splits[2]
+                                + "," + splits[3] + "," + splits[4] + "," + splits[5] + ","
+                                + splits[6] + "," + splits[7] + "," + splits[8] + "\r\n";
 
-                    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    PrintStream out = new PrintStream(socket.getOutputStream());
+                        // Try to connect to server
+                        try {
+                            Socket socket = new Socket(sockAddress, sockPort);
+                            System.out.println("**** Connexion start ****");
 
-                    out.println(gpsTrame);
-                    System.out.println("Sended : " + gpsTrame);
+                            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                            PrintStream out = new PrintStream(socket.getOutputStream());
 
-                    System.out.println(in.readLine());  
-                    socket.close();
-                    
-                    //Sleep
-                    try {                
-                        Thread.currentThread().sleep(sendPeriod * 1000);
-                    } catch (InterruptedException e) {}
+                            out.println(gpsTrame);
+                            System.out.print("Sended : " + gpsTrame);
 
-                } catch (IOException e) {
-                    System.out.println("Oops ! Error sending data");
-                    e.printStackTrace();
+                            System.out.println(in.readLine());
+                            socket.close();
+
+                        } catch (IOException e) {
+                            System.err.println("Oops ! Coudn't send data");
+                            //e.printStackTrace();
+                        }
+                                                    //Sleep
+                        try {
+                              Thread.currentThread().sleep(sendPeriod * 1000);
+                            } catch (InterruptedException e) {
+                              
+                            }
                 }
+                
+            } catch (InterruptedException e) {
+                scanner.close();
+                System.err.println("GPS Stopped by user");
             }
+            
             scanner.close();
+
+        } catch (FileNotFoundException e) {
+            System.err.println("Oops ! Error reading positions file");
         }
-        catch (FileNotFoundException e) {
-            System.out.println("Oops ! Error reading positions file");
+    }
+
+    public synchronized void stopGPS() {
+        this.stopGPS = true;
+    }
+
+    public synchronized void testStop() throws InterruptedException {
+        if (stopGPS) {
+            throw new InterruptedException();
         }
-        
-   }
-    
-   public void setAddress (String address) {
-       this.sockAddress = address;
-   }
-   
-   public String getAddress() {
-   
-       return this.sockAddress;
-   }
-   
-   public void setPort (int port) {
-       this.sockPort = port;
-   }
-   
-   public int getPort() {
-       return this.sockPort;
-   }
-   
-/*       
+    }
 
+    public void setAddress(String address) {
+        this.sockAddress = address;
+    }
 
-my $socket = IO::Socket::INET->new(Proto    => "tcp",
-                                   PeerAddr => "192.168.3.33",
-                                   Pee  ²rPort => 42400)
-or die "Failed : $@\n";
+    public String getAddress() {
 
-print "*** Debut de connexion ***\n";
-#  print $socket "$trame1\r\n";
-#  print $socket "$trame2\r\n";
+        return this.sockAddress;
+    }
 
-# 1000000002,20120703080734,4,499316,45,468393,63,221,0,4,0
-open (JEU,"jeu_essai_positions.txt") or die ("erreur ouverture jeu essai");
-my $vehicule ="2000000001";
+    public void setPort(int port) {
+        this.sockPort = port;
+    }
 
-while (my $ligne=<JEU>) {
-  	chomp($ligne);
-	my @params = split(",",$ligne);
-	print "Date " . $dtj->ymd('') . $dtj->time('') . "\n";
-	print "nombre de parametres ", $#params+1 . "\n";
-	my $trame = $vehicule . ',' . $dtj->ymd('') . $dtj->time('') . ',' . $params[2] . ',' .
-		$params[3] . ',' . $params[4] . ',' . $params[5] . ',' . 
-		$params[6] . ',' . $params[7] . ',' . $params[8]  . "\r\n"; 
-  	#my $trame = $ligne . "\r\n";
-  	print "envoi trame :" . $trame;
-  	print $socket $trame;
-  	sleep(60);
-   	$dtj = DateTime->now(); # La date et heure quand meme ...
-   	$dtj->set_time_zone($time_zone); # transforme la date dans le fuseau horaire
+    public int getPort() {
+        return this.sockPort;
+    }
 }
-close(JEU);
-print "*** Fin de connexion ***\n";
-__END__
-        */
-        
-}
-

@@ -30,17 +30,12 @@ public class GPSSimulator {
             }
             System.out.println();
             Nomadic gpsTracker = new Nomadic(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[4]);
-            gpsTracker.Run();
-            
-        } else if (args[0]  == "help") {
-           
-            System.out.println("Usage : gpssimulator ip port period ime file");
-            System.exit(0);
+            (new Thread (gpsTracker)).start();
             
         } else if (args.length  != 5) {
             System.out.println("Use default value : 192.168.0.11, 42400, 15, D:\\gps_collect\\perl\\jeu_essai_positions.txt");
-            Nomadic gpsTracker = new Nomadic("192.168.0.11", 42400, 15, 2000000001, "D:\\gps_collect\\perl\\jeu_essai_positions.txt");
-            gpsTracker.Run();
+            Nomadic gpsTracker = new Nomadic("192.168.0.11", 42400, 5, 2000000001, "D:\\gps_collect\\perl\\jeu_essai_positions.txt");
+            (new Thread (gpsTracker)).start();
               
         }
     }  
