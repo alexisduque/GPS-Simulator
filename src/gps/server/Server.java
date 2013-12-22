@@ -10,7 +10,7 @@
  *
  */
 
-package gps.simulator;
+package gps.server;
 
 import java.io.BufferedReader;
 import java.net.ServerSocket;

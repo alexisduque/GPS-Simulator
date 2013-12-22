@@ -1,3 +1,5 @@
+package gps.simulator.tools;
+
 import java.io.*;
 import java.awt.*;
 import javax.swing.*;

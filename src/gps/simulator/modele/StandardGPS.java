@@ -6,7 +6,7 @@
  * Author: Alexis DUQUE - alexisd61@gmail.com - 2013
  *
  */
-package gps.simulator;
+package gps.simulator.modele;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -89,11 +89,11 @@ public class StandardGPS {
 
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintStream out = new PrintStream(socket.getOutputStream());
-
+            // Send Trame throught socket
             out.println(gpsTrame);
             System.out.print("Sended : " + gpsTrame);
-
-            System.out.println(in.readLine());
+            // Waiting for ACK message
+            //System.out.println(in.readLine());
             socket.close();
 
         } catch (IOException e) {

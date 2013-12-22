@@ -1,4 +1,5 @@
 /*
+
  * JAVA GPS Simulator
  * ISO Raid Project
  * 
@@ -7,7 +8,7 @@
  * Author: Alexis DUQUE - alexisd61@gmail.com - 2013
  *
  */
-package gps.simulator;
+package gps.simulator.modele;
 
 import java.util.*;
 import java.lang.*;
@@ -40,6 +41,7 @@ public class Nomadic extends StandardGPS implements Runnable {
                     Date date = new Date();
                     TimeZone.setDefault(TimeZone.getTimeZone(timeZone));
                     String dateString = dateFormat.format(date);
+                    //Show formated Date
                     System.out.println(dateString);
                     // Read line frome file
                     line = scanner.nextLine();

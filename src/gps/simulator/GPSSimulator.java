@@ -10,6 +10,8 @@
 
 package gps.simulator;
 
+import gps.simulator.modele.Nomadic;
+
 /**
  *
  * @author Alex
