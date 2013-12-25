@@ -16,6 +16,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Random;
 
 public class StandardGPS implements Runnable{
 
@@ -30,10 +31,11 @@ public class StandardGPS implements Runnable{
     protected GPSimulatorFrame simulator;
     
     public StandardGPS(){
+        Random rand = new Random(); 
         this.sockAddress = "localhost";
         this.sockPort = 42400;
         this.sendPeriod = 20;
-        this.imei = 2000000001;
+        this.imei = 2000000001 + rand.nextInt(1000);
         this.fileGPS = "D:\\gps_collect\\perl\\jeu_essai_positions.txt";
         this.stopGPS = false;
         

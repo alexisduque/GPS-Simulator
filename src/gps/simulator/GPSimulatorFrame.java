@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Random;
 
 /*
  * JAVA GPS Simulator
@@ -242,14 +243,15 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
         final String fileT = fileText.getText();
         final int port = Integer.parseInt(serverPort.getText());
         final int per = Integer.parseInt(sendPeriod.getText());
-
+        Random rand = new Random(); 
+        int imei = 2000000001 + rand.nextInt(1000);
 
             switch (gpsModel.getSelectedIndex()) {
                 case 0:
-                    gpsTracker = new Nomadic(ip, port, per, 2000000001, fileT, this);
+                    gpsTracker = new Nomadic(ip, port, per, imei, fileT, this);
                     break;
                 case 1:
-                    gpsTracker = new Teltonica(ip, port, per, 2000000001, fileT, this);
+                    gpsTracker = new Teltonica(ip, port, per, imei, fileT, this);
                     break;
             }
         
