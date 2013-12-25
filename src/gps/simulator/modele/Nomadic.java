@@ -10,7 +10,7 @@
  */
 package gps.simulator.modele;
 
-import gps.simulator.GPSimulatorFrame;
+import gps.simulator.GPSimulatorGUI;
 import java.util.*;
 import java.lang.*;
 import java.io.*;
@@ -22,7 +22,7 @@ import java.util.Date;
  */
 public class Nomadic extends StandardGPS {
 
-    public Nomadic(String address, int port, int period, int code, String file, GPSimulatorFrame sim) {
+    public Nomadic(String address, int port, int period, int code, String file, GPSimulatorGUI sim) {
         super(address, port, period, code, file, sim);
     }
 

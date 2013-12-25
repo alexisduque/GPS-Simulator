@@ -16,7 +16,7 @@ import gps.simulator.modele.Nomadic;
  *
  * @author Alex
  */
-public class GPSSimulator extends GPSimulatorFrame{
+public class GPSSimulator extends GPSimulatorGUI{
 
     /**
      * @param args the command line arguments

@@ -20,12 +20,12 @@ import java.util.Random;
  */
 import javax.swing.*;
 
-public class GPSimulatorFrame extends javax.swing.JFrame {
+public class GPSimulatorGUI extends javax.swing.JFrame {
 
     /**
      * Creates new form GPSimulatorFrame
      */
-    public GPSimulatorFrame() {
+    public GPSimulatorGUI() {
         initComponents();
         initConsole();
     }
@@ -330,20 +330,20 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GPSimulatorFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GPSimulatorGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GPSimulatorFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GPSimulatorGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GPSimulatorFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GPSimulatorGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GPSimulatorFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GPSimulatorGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GPSimulatorFrame().setVisible(true);
+                new GPSimulatorGUI().setVisible(true);
             }
         });
     }

@@ -8,7 +8,7 @@
  */
 package gps.simulator.modele;
 
-import gps.simulator.GPSimulatorFrame;
+import gps.simulator.GPSimulatorGUI;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -28,7 +28,7 @@ public class StandardGPS implements Runnable{
     protected int imei;
     protected String fileGPS;
     protected boolean stopGPS;
-    protected GPSimulatorFrame simulator;
+    protected GPSimulatorGUI simulator;
     
     public StandardGPS(){
         Random rand = new Random(); 
@@ -41,7 +41,7 @@ public class StandardGPS implements Runnable{
         
     }
 
-    public StandardGPS(String address, int port, int period, int code, String file, GPSimulatorFrame simulator) {
+    public StandardGPS(String address, int port, int period, int code, String file, GPSimulatorGUI simulator) {
         this.sockAddress = address;
         this.sockPort = port;
         this.sendPeriod = period;
