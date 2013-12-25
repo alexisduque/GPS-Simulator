@@ -10,6 +10,7 @@
  */
 package gps.simulator.modele;
 
+import gps.simulator.GPSimulatorFrame;
 import java.util.*;
 import java.lang.*;
 import java.io.*;
@@ -21,8 +22,8 @@ import java.util.Date;
  */
 public class Nomadic extends StandardGPS {
 
-    public Nomadic(String address, int port, int period, int code, String file) {
-        super(address, port, period, code, file);
+    public Nomadic(String address, int port, int period, int code, String file, GPSimulatorFrame sim) {
+        super(address, port, period, code, file, sim);
     }
 
     @Override
@@ -54,6 +55,7 @@ public class Nomadic extends StandardGPS {
 
                     // Try to connect to server and send data
                     sendTrame(gpsTrame);
+                    stopIsSend();
                     //Sleep
                     sleep();
                 }

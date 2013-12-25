@@ -1,6 +1,5 @@
 package gps.simulator;
 
-
 import gps.simulator.tools.MessageConsole;
 import gps.simulator.modele.Nomadic;
 import gps.simulator.modele.StandardGPS;
@@ -18,7 +17,6 @@ import java.io.IOException;
  * Author: Alexis DUQUE - alexisd61@gmail.com - 2013
  *
  */
-
 import javax.swing.*;
 
 public class GPSimulatorFrame extends javax.swing.JFrame {
@@ -68,7 +66,7 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
         setTitle("GPS Simulator - ISO Raid Project 2014");
         setResizable(false);
 
-        gpsModel.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Nomadic", "Teltonica", " " }));
+        gpsModel.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Nomadic", "Teltonica" }));
         gpsModel.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 gpsModelItemStateChanged(evt);
@@ -140,11 +138,9 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
 
         sendPeriod.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###"))));
         sendPeriod.setText("15");
-        sendPeriod.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                sendPeriodInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+        sendPeriod.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                sendPeriodKeyPressed(evt);
             }
         });
 
@@ -246,18 +242,18 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
         final String fileT = fileText.getText();
         final int port = Integer.parseInt(serverPort.getText());
         final int per = Integer.parseInt(sendPeriod.getText());
-        
-        if (gpsTracker == null) {
+
+
             switch (gpsModel.getSelectedIndex()) {
                 case 0:
-                    gpsTracker = new Nomadic(ip, port, per, 2000000001, fileT);
+                    gpsTracker = new Nomadic(ip, port, per, 2000000001, fileT, this);
                     break;
                 case 1:
-                    gpsTracker = new Teltonica(ip, port, per, 2000000001, fileT);
+                    gpsTracker = new Teltonica(ip, port, per, 2000000001, fileT, this);
                     break;
             }
-        }
-
+        
+        stopGPS = false;
         (new Thread(gpsTracker)).start();
 
     }//GEN-LAST:event_buttonStartActionPerformed
@@ -269,6 +265,7 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
         try {
             gpsTracker.stopGPS();
             gpsTracker = null;
+            System.err.println("Stop Send");
         } catch (Exception e) {
             System.err.println("No GPS Started");
         }
@@ -292,20 +289,20 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_fileTextMouseClicked
 
     private void serverPortInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_serverPortInputMethodTextChanged
-        gpsTracker = null;
+
     }//GEN-LAST:event_serverPortInputMethodTextChanged
 
     private void serverIPInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_serverIPInputMethodTextChanged
-        gpsTracker = null;
+
     }//GEN-LAST:event_serverIPInputMethodTextChanged
 
-    private void sendPeriodInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_sendPeriodInputMethodTextChanged
-        gpsTracker = null;
-    }//GEN-LAST:event_sendPeriodInputMethodTextChanged
-
     private void gpsModelItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_gpsModelItemStateChanged
-        gpsTracker = null;      
+
     }//GEN-LAST:event_gpsModelItemStateChanged
+
+    private void sendPeriodKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sendPeriodKeyPressed
+
+    }//GEN-LAST:event_sendPeriodKeyPressed
 
     private void initConsole() {
         MessageConsole mc = new MessageConsole(console);
@@ -364,7 +361,8 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
             return "Text documents (*.txt)";
         }
     }
-
+    
+    public boolean stopGPS;
     private StandardGPS gpsTracker;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonQuit;

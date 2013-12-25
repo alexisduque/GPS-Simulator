@@ -8,6 +8,7 @@
  */
 package gps.simulator.modele;
 
+import gps.simulator.GPSimulatorFrame;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,7 +27,8 @@ public class StandardGPS implements Runnable{
     protected int imei;
     protected String fileGPS;
     protected boolean stopGPS;
-
+    protected GPSimulatorFrame simulator;
+    
     public StandardGPS(){
         this.sockAddress = "localhost";
         this.sockPort = 42400;
@@ -34,27 +36,37 @@ public class StandardGPS implements Runnable{
         this.imei = 2000000001;
         this.fileGPS = "D:\\gps_collect\\perl\\jeu_essai_positions.txt";
         this.stopGPS = false;
+        
     }
 
-    public StandardGPS(String address, int port, int period, int code, String file) {
+    public StandardGPS(String address, int port, int period, int code, String file, GPSimulatorFrame simulator) {
         this.sockAddress = address;
         this.sockPort = port;
         this.sendPeriod = period;
         this.imei = code;
         this.fileGPS = file;
         this.stopGPS = false;
+        this.simulator = simulator;
     }
 
     public void run() {
     }
 
     public synchronized void stopGPS() {
+        simulator.stopGPS = true;
         this.stopGPS = true;
     }
 
     public synchronized void testStop() throws InterruptedException {
-        if (stopGPS) {
+        if (simulator.stopGPS) {
+            this.stopGPS = true;
             throw new InterruptedException();
+        }
+    }
+    
+    public synchronized void stopIsSend() {
+        if (simulator.stopGPS) {
+            this.stopGPS = true;
         }
     }
 
@@ -85,7 +97,7 @@ public class StandardGPS implements Runnable{
     public void sendTrame(String gpsTrame) {
         try {
             Socket socket = new Socket(sockAddress, sockPort);
-            System.out.println("**** Connexion start - Nomadic GPS****");
+            System.out.println("**** Connexion start - NomadicGPS****");
 
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintStream out = new PrintStream(socket.getOutputStream());
