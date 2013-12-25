@@ -16,7 +16,7 @@ import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-public class StandardGPS {
+public class StandardGPS implements Runnable{
 
     protected String timeZone;
     DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -85,7 +85,7 @@ public class StandardGPS {
     public void sendTrame(String gpsTrame) {
         try {
             Socket socket = new Socket(sockAddress, sockPort);
-            System.out.println("**** Connexion start ****");
+            System.out.println("**** Connexion start - Nomadic GPS****");
 
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintStream out = new PrintStream(socket.getOutputStream());

@@ -13,15 +13,16 @@ package gps.simulator.modele;
 import java.util.*;
 import java.lang.*;
 import java.io.*;
+import java.net.Socket;
 import java.util.Date;
 
 /**
  *
  * @author Alex
  */
-public class Nomadic extends StandardGPS {
+public class Teltonica extends StandardGPS {
 
-    public Nomadic(String address, int port, int period, int code, String file) {
+    public Teltonica(String address, int port, int period, int code, String file) {
         super(address, port, period, code, file);
     }
 
@@ -67,6 +68,27 @@ public class Nomadic extends StandardGPS {
 
         } catch (FileNotFoundException e) {
             System.err.println("Oops ! Error reading positions file");
+        }
+    }
+    
+    @Override
+    public void sendTrame(String gpsTrame) {
+        try {
+            Socket socket = new Socket(sockAddress, sockPort);
+            System.out.println("**** Connexion start - Teltonica GPS****");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintStream out = new PrintStream(socket.getOutputStream());
+            // Send Trame throught socket
+            out.println(gpsTrame);
+            System.out.print("Sended : " + gpsTrame);
+            // Waiting for ACK message
+            System.out.println(in.readLine());
+            socket.close();
+
+        } catch (IOException e) {
+            System.err.println("Oops ! Coudn't send data");
+            //e.printStackTrace();
         }
     }
 }

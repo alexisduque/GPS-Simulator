@@ -3,6 +3,8 @@ package gps.simulator;
 
 import gps.simulator.tools.MessageConsole;
 import gps.simulator.modele.Nomadic;
+import gps.simulator.modele.StandardGPS;
+import gps.simulator.modele.Teltonica;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileReader;
@@ -61,13 +63,17 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
 
         fileChooser.setAcceptAllFileFilterUsed(false);
         fileChooser.setFileFilter(new OnlyTextFilter());
-        fileChooser.setFileHidingEnabled(true);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("GPS Simulator - ISO Raid Project 2014");
         setResizable(false);
 
-        gpsModel.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Nomadic" }));
+        gpsModel.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Nomadic", "Teltonica", " " }));
+        gpsModel.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                gpsModelItemStateChanged(evt);
+            }
+        });
 
         buttonStart.setText("Start");
         buttonStart.addActionListener(new java.awt.event.ActionListener() {
@@ -86,10 +92,10 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
         serverIP.setText("192.168.0.11");
         serverIP.setToolTipText("");
         serverIP.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 serverIPInputMethodTextChanged(evt);
+            }
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
 
@@ -114,16 +120,11 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
         serverPort.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#####"))));
         serverPort.setText("42400");
         serverPort.setToolTipText("");
-        serverPort.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                serverPortActionPerformed(evt);
-            }
-        });
         serverPort.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 serverPortInputMethodTextChanged(evt);
+            }
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
 
@@ -140,13 +141,14 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
         sendPeriod.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###"))));
         sendPeriod.setText("15");
         sendPeriod.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 sendPeriodInputMethodTextChanged(evt);
             }
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
         });
 
+        console.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jScrollPane2.setViewportView(console);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -156,6 +158,9 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -172,26 +177,20 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
                                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addGap(18, 18, 18)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(fileText, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(gpsModel, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(serverIP, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(gpsModel, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(serverIP, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(sendPeriod, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(buttonStop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(serverPort))
-                                        .addGap(18, 18, 18)
-                                        .addComponent(buttonQuit, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addContainerGap(309, Short.MAX_VALUE))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(sendPeriod, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(buttonStop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(serverPort))
+                                .addGap(18, 18, 18)
+                                .addComponent(buttonQuit, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(fileText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 489, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -242,13 +241,21 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
         // Start Simulator
         //buttonStart.setEnabled(false);
         //buttonStop.setEnabled(true);
+        
         final String ip = serverIP.getText();
         final String fileT = fileText.getText();
         final int port = Integer.parseInt(serverPort.getText());
         final int per = Integer.parseInt(sendPeriod.getText());
-
+        
         if (gpsTracker == null) {
-            gpsTracker = new Nomadic(ip, port, per, 2000000001, fileT);
+            switch (gpsModel.getSelectedIndex()) {
+                case 0:
+                    gpsTracker = new Nomadic(ip, port, per, 2000000001, fileT);
+                    break;
+                case 1:
+                    gpsTracker = new Teltonica(ip, port, per, 2000000001, fileT);
+                    break;
+            }
         }
 
         (new Thread(gpsTracker)).start();
@@ -266,10 +273,6 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
             System.err.println("No GPS Started");
         }
     }//GEN-LAST:event_buttonStopActionPerformed
-
-    private void serverPortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverPortActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_serverPortActionPerformed
 
     private void fileTextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fileTextMouseClicked
         int returnVal = fileChooser.showOpenDialog(this);
@@ -299,6 +302,10 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
     private void sendPeriodInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_sendPeriodInputMethodTextChanged
         gpsTracker = null;
     }//GEN-LAST:event_sendPeriodInputMethodTextChanged
+
+    private void gpsModelItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_gpsModelItemStateChanged
+        gpsTracker = null;      
+    }//GEN-LAST:event_gpsModelItemStateChanged
 
     private void initConsole() {
         MessageConsole mc = new MessageConsole(console);
@@ -358,7 +365,7 @@ public class GPSimulatorFrame extends javax.swing.JFrame {
         }
     }
 
-    private Nomadic gpsTracker;
+    private StandardGPS gpsTracker;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonQuit;
     private javax.swing.JButton buttonStart;
