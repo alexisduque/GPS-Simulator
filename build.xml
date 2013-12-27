@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="GPS-Simulator" default="run" basedir=".">
-   <description>Builds, tests, and runs the project GPS-Simulator.</description>
+	
+   <description>Builds, and runs the project GPS-Simulator. Tests to add.</description>
+   
 	<property name="src.dir"     value="src"/>
 	<property name="bin.dir"   value="bin"/>
 	<property name="jar.dir" value="dist"/>
+	<property name="test"  location="test"/>
 	<property name="main-class"  value="gps.simulator.GPSimulatorGUI"/>
 
 	<target name="clean">
@@ -17,7 +20,10 @@
 		<javac srcdir="${src.dir}" destdir="${bin.dir}"/>
 		<echo message="compilation terminee"/>
 	</target>
-
+	
+    <target name="test" depends="jar">
+    </target>
+    
 	<target name="jar" depends="compile">
 		<mkdir dir="${jar.dir}"/>
 			<jar destfile="${jar.dir}/GPS-Simulator.jar" basedir="${bin.dir}">
@@ -32,4 +38,7 @@
 		<java jar="${jar.dir}/GPS-Simulator.jar" fork="true"/>
 	</target>
 
+    <target name="clean-build" depends="clean,jar"/>
+    <target name="main" depends="clean,run"/>
+    
 </project>
