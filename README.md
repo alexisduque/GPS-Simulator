@@ -2,6 +2,9 @@ GPS-Simulator
 =============
 
 GPS Simulator
+
+[![Build Status](https://travis-ci.org/alexisduque/GPS-Simulator.png?branch=master)](https://travis-ci.org/alexisduque/GPS-Simulator)
+
 ## Compilation
 
 1. To compile only
