@@ -8,13 +8,14 @@
 	<property name="jar.dir" value="dist"/>
 	<property name="test"  location="test"/>
 	<property name="main-class"  value="gps.simulator.GPSimulatorGUI"/>
-
+        <property name="server-main-class"  value="gps.server.Server"/>
+        
 	<target name="clean">
 		<delete dir="${bin.dir}"/>
 		<delete dir="${jar.dir}"/>
 		<echo message="Nettoyage termine"/>
 	</target>
-
+        
 	<target name="compile" depends="clean">
 		<mkdir dir="${bin.dir}"/>
 		<javac srcdir="${src.dir}" destdir="${bin.dir}"/>
@@ -24,7 +25,7 @@
     <target name="test" depends="jar">
     </target>
     
-	<target name="jar" depends="compile">
+	<target name="jar" depends="jar-server">
 		<mkdir dir="${jar.dir}"/>
 			<jar destfile="${jar.dir}/GPS-Simulator.jar" basedir="${bin.dir}">
 				<manifest>
@@ -33,11 +34,23 @@
 			</jar>
 		<echo message="Creation du fichier Jar terminee"/>
 	</target>
-
+        <target name="jar-server" depends="compile">
+		<mkdir dir="${jar.dir}"/>
+			<jar destfile="${jar.dir}/GPS-Server.jar" basedir="${bin.dir}">
+				<manifest>
+					<attribute name="Main-Class" value="${server-main-class}"/>
+				</manifest>
+			</jar>
+		<echo message="Creation du fichier Jar terminee"/>
+	</target>
 	<target name="run" depends="jar">
 		<java jar="${jar.dir}/GPS-Simulator.jar" fork="true"/>
 	</target>
-
+        
+        <target name="run-server" depends="jar">
+		<java jar="${jar.dir}/GPS-Server.jar" fork="true"/>
+	</target>
+        
     <target name="clean-build" depends="clean,jar"/>
     <target name="main" depends="clean,run"/>
     
