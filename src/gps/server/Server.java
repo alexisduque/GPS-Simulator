@@ -5,7 +5,7 @@
  * From Perl oPhone GPS Simulator
  * Author: Alexis DUQUE - alexisd61@gmail.com - 2013
  *
- * Multhread Server listening on 42400 port. 10min Timeout. Build to test 
+ * Multhread Server listening on 2947 port. 10min Timeout. Build to test 
  * Coded to test GPS Simulator app
  *
  */
@@ -22,7 +22,7 @@ import java.io.OutputStream;
 
 public class Server implements Runnable {
 
-    protected int serverPort = 42400;
+    protected int serverPort = 2947;
     protected ServerSocket serverSocket = null;
     protected boolean isStopped = false;
     protected Thread runningThread = null;
@@ -79,7 +79,7 @@ public class Server implements Runnable {
     }
 
     public static void main(String[] args) {
-        Server server = new Server(42400);
+        Server server = new Server(2947);
         new Thread(server).start();
 
         try {
