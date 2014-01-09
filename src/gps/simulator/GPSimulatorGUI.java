@@ -91,10 +91,10 @@ public class GPSimulatorGUI extends javax.swing.JFrame {
         serverIP.setText("192.168.0.11");
         serverIP.setToolTipText("");
         serverIP.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 serverIPInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
 
@@ -117,13 +117,13 @@ public class GPSimulatorGUI extends javax.swing.JFrame {
         });
 
         serverPort.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#####"))));
-        serverPort.setText("42400");
+        serverPort.setText("2947");
         serverPort.setToolTipText("");
         serverPort.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 serverPortInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
 
