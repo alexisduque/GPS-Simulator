@@ -36,7 +36,7 @@ public class Server implements Runnable {
             this.runningThread = Thread.currentThread();
         }
         openServerSocket();
-        System.out.println("Collect Server Started.");
+        System.out.println("Collect Server Started on port " + this.serverPort);
         while (!isStopped()) {
             Socket clientSocket = null;
             try {
