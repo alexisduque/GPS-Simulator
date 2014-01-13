@@ -83,7 +83,7 @@ public class Server implements Runnable {
         new Thread(server).start();
 
         try {
-            Thread.sleep(600 * 1000);
+            Thread.sleep(6000 * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -108,14 +108,15 @@ public class Server implements Runnable {
                 OutputStream output = clientSocket.getOutputStream();
                 String trame = in.readLine();
                 long time = System.currentTimeMillis();
+       
+                System.out.println("Received: " + trame);
                 output.write(("ACK "
                         + this.serverText + " - "
                         + time
                         + "").getBytes());
                 output.close();
                 input.close();
-                System.out.println("Request processed: " + time);
-                System.out.println("Received: " + trame);
+                
             } catch (IOException e) {
                 //report exception somewhere.
                 e.printStackTrace();
