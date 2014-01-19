@@ -96,7 +96,7 @@ public class ServerTK102 implements Runnable {
         new Thread(server).start();
 
         try {
-            Thread.sleep(6000 * 1000);
+            Thread.sleep(600000 * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
