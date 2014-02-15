@@ -88,7 +88,7 @@ public class GPSimulatorGUI extends javax.swing.JFrame {
             }
         });
 
-        serverIP.setText("192.168.0.11");
+        serverIP.setText("localhost");
         serverIP.setToolTipText("");
         serverIP.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
@@ -138,7 +138,12 @@ public class GPSimulatorGUI extends javax.swing.JFrame {
         });
 
         sendPeriod.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###"))));
-        sendPeriod.setText("15");
+        sendPeriod.setText("5");
+        sendPeriod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendPeriodActionPerformed(evt);
+            }
+        });
         sendPeriod.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 sendPeriodKeyPressed(evt);
@@ -244,7 +249,7 @@ public class GPSimulatorGUI extends javax.swing.JFrame {
         final int port = Integer.parseInt(serverPort.getText());
         final int per = Integer.parseInt(sendPeriod.getText());
         Random rand = new Random(); 
-        int imei = 2000000001 + rand.nextInt(1000);
+        int imei = 0000000003;// + rand.nextInt(1000);
 
             switch (gpsModel.getSelectedIndex()) {
                 case 0:
@@ -305,6 +310,10 @@ public class GPSimulatorGUI extends javax.swing.JFrame {
     private void sendPeriodKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sendPeriodKeyPressed
 
     }//GEN-LAST:event_sendPeriodKeyPressed
+
+    private void sendPeriodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendPeriodActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_sendPeriodActionPerformed
 
     private void initConsole() {
         MessageConsole mc = new MessageConsole(console);

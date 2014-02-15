@@ -29,6 +29,10 @@ public class StandardGPS implements Runnable{
     protected String fileGPS;
     protected boolean stopGPS;
     protected GPSimulatorGUI simulator;
+    protected Socket socket;
+    protected ListenThread listen;
+    public PrintStream out;
+    public String filsBufer;
     
     public StandardGPS(){
         Random rand = new Random(); 
@@ -38,6 +42,7 @@ public class StandardGPS implements Runnable{
         this.imei = 2000000001 + rand.nextInt(1000);
         this.fileGPS = "D:\\gps_collect\\perl\\jeu_essai_positions.txt";
         this.stopGPS = false;
+        this.filsBufer = null;
         
     }
 
@@ -49,6 +54,8 @@ public class StandardGPS implements Runnable{
         this.fileGPS = file;
         this.stopGPS = false;
         this.simulator = simulator;
+        this.filsBufer = null;
+        
     }
 
     public void run() {
@@ -62,6 +69,7 @@ public class StandardGPS implements Runnable{
     public synchronized void testStop() throws InterruptedException {
         if (simulator.stopGPS) {
             this.stopGPS = true;
+            listen.stop = true;
             throw new InterruptedException();
         }
     }
@@ -69,6 +77,7 @@ public class StandardGPS implements Runnable{
     public synchronized void stopIsSend() {
         if (simulator.stopGPS) {
             this.stopGPS = true;
+            listen.stop = true;
         }
     }
 
@@ -97,23 +106,16 @@ public class StandardGPS implements Runnable{
     }
 
     public void sendTrame(String gpsTrame) {
-        try {
-            Socket socket = new Socket(sockAddress, sockPort);
-            System.out.println("**** Connexion start - NomadicGPS****");
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintStream out = new PrintStream(socket.getOutputStream());
+            
+            System.out.println("**** Connexion start - NomadicGPS****");
             // Send Trame throught socket
             out.println(gpsTrame);
+            out.flush();
             System.out.print("Sended : " + gpsTrame);
             // Waiting for ACK message
             //System.out.println(in.readLine());
-            socket.close();
 
-        } catch (IOException e) {
-            System.err.println("Oops ! Coudn't send data");
-            //e.printStackTrace();
-        }
     }
 }
 
