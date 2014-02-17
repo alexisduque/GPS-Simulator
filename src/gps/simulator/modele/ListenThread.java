@@ -47,14 +47,13 @@ public class ListenThread extends Thread {
                             }
                         }
                     } catch (IOException e) {
-                        System.err.println("CLI input error !! ");
-                        System.err.println(e);
+                        System.err.println("Server connection closed !");
                     }
                 
         } catch (InterruptedException io) {
          
             System.out.println("CLI stop");
-            System.err.println(io);
+            //System.err.println(io);
         }
         
     }

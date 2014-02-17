@@ -142,9 +142,8 @@
     <Component class="javax.swing.JComboBox" name="gpsModel">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="2">
+          <StringArray count="1">
             <StringItem index="0" value="Nomadic"/>
-            <StringItem index="1" value="Teltonica"/>
           </StringArray>
         </Property>
       </Properties>
@@ -235,9 +234,6 @@
         <Property name="editable" type="boolean" value="false"/>
         <Property name="text" type="java.lang.String" value="jeu_essai_positions.txt"/>
       </Properties>
-      <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="fileTextMouseClicked"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JFormattedTextField" name="sendPeriod">
       <Properties>

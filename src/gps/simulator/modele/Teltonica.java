@@ -29,50 +29,59 @@ public class Teltonica extends StandardGPS {
 
     @Override
     public void run() {
-        this.timeZone = "Europe/Paris";
-
-        //Try to read position file
         try {
-            Scanner scanner = new Scanner(new FileReader(fileGPS));
-            String line = null;
-            try {
-                while (scanner.hasNextLine()) {
-                    // Check if stop thread msg send
-                    testStop();
-                    // Format and print Date
-                    Date date = new Date();
-                    TimeZone.setDefault(TimeZone.getTimeZone(timeZone));
-                    String dateString = dateFormat.format(date);
-                    //Show formated Date
-                    System.out.println(dateString);
-                    // Read line frome file
-                    line = scanner.nextLine();
-                    String[] splits = line.split(",");
-                    System.out.println("Param number : " + splits.length);
-                    // Build trame
-                    String gpsTrame = this.imei + "," + dateString + "," + splits[2]
-                            + "," + splits[3] + "," + splits[4] + "," + splits[5] + ","
-                            + splits[6] + "," + splits[7] + "," + splits[8] + "\r\n";
 
-                    // Try to connect to server and send data
-                    sendTrame(gpsTrame);
-                    stopIsSend();
-                    //Sleep
-                    sleep();
+            socket = new Socket(sockAddress, sockPort);
+            out = new PrintStream(socket.getOutputStream());
+            this.timeZone = "Europe/Paris";
+            this.listen = new ListenThread(socket, this);
+            listen.start();
+            //Try to read position file
+            InputStream stream = Nomadic.class.getResourceAsStream("/gps/resources/jeu_essai_positions.txt");
+            try (Scanner scanner = new Scanner(stream)) {
+                String line = null;
+                try {
+                    while (scanner.hasNextLine()) {
+                        // Check if stop thread msg send
+                        testStop();
+                        // Format and print Date
+                        Date date = new Date();
+                        TimeZone.setDefault(TimeZone.getTimeZone(timeZone));
+                        String dateString = dateFormat.format(date);
+                        //Show formated Date
+                        System.out.println(dateString);
+                        // Read line frome file
+                        line = scanner.nextLine();
+                        String[] splits = line.split(",");
+                        System.out.println("Param number : " + splits.length);
+                        // Build trame
+                        String gpsTrame = this.imei + "," + dateString + "," + splits[2]
+                                + "," + splits[3] + "," + splits[4] + "," + splits[5] + ","
+                                + splits[6] + "," + splits[7] + "," + splits[8] + "\r\n";
+
+                        // Try to connect to server and send data
+                        sendTrame(gpsTrame);
+                        stopIsSend();
+                        //Sleep
+                        sleep();
+                    }
+
+                } catch (InterruptedException e) {
+                    scanner.close();
+                    System.err.println("GPS Stopped by user");
                 }
 
-            } catch (InterruptedException e) {
                 scanner.close();
-                System.err.println("GPS Stopped by user");
+
+            } catch (Exception e) {
+                System.err.println("Oops ! Error reading positions file");
             }
-
-            scanner.close();
-
-        } catch (FileNotFoundException e) {
-            System.err.println("Oops ! Error reading positions file");
+        } catch (IOException e) {
+            System.err.println("Oops ! Coudn't send data");
+            //e.printStackTrace();
         }
     }
-    
+
     @Override
     public void sendTrame(String gpsTrame) {
         try {

@@ -67,7 +67,7 @@ public class GPSimulatorGUI extends javax.swing.JFrame {
         setTitle("GPS Simulator - ISO Raid Project 2014");
         setResizable(false);
 
-        gpsModel.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Nomadic", "Teltonica" }));
+        gpsModel.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Nomadic" }));
         gpsModel.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 gpsModelItemStateChanged(evt);
@@ -131,11 +131,6 @@ public class GPSimulatorGUI extends javax.swing.JFrame {
 
         fileText.setEditable(false);
         fileText.setText("jeu_essai_positions.txt");
-        fileText.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                fileTextMouseClicked(evt);
-            }
-        });
 
         sendPeriod.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###"))));
         sendPeriod.setText("5");
@@ -277,23 +272,6 @@ public class GPSimulatorGUI extends javax.swing.JFrame {
             System.err.println("No GPS Started");
         }
     }//GEN-LAST:event_buttonStopActionPerformed
-
-    private void fileTextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fileTextMouseClicked
-        int returnVal = fileChooser.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            try {
-                FileReader reader = new FileReader(file.getAbsolutePath());
-                console.setText(file.getAbsolutePath());
-                fileText.setText(file.getAbsolutePath());
-                gpsTracker = null;
-            } catch (IOException ex) {
-                System.err.println("problem accessing file" + file.getAbsolutePath());
-            }
-        } else {
-            System.out.println("File access cancelled by user.");
-        }
-    }//GEN-LAST:event_fileTextMouseClicked
 
     private void serverPortInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_serverPortInputMethodTextChanged
 
