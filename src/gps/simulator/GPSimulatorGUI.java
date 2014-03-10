@@ -3,6 +3,7 @@ package gps.simulator;
 import gps.simulator.tools.MessageConsole;
 import gps.simulator.modele.Nomadic;
 import gps.simulator.modele.StandardGPS;
+import gps.simulator.modele.TK102;
 import gps.simulator.modele.Teltonica;
 import java.awt.Color;
 import java.io.File;
@@ -67,7 +68,7 @@ public class GPSimulatorGUI extends javax.swing.JFrame {
         setTitle("GPS Simulator - ISO Raid Project 2014");
         setResizable(false);
 
-        gpsModel.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Nomadic" }));
+        gpsModel.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Nomadic", "TK-102" }));
         gpsModel.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 gpsModelItemStateChanged(evt);
@@ -91,10 +92,10 @@ public class GPSimulatorGUI extends javax.swing.JFrame {
         serverIP.setText("localhost");
         serverIP.setToolTipText("");
         serverIP.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 serverIPInputMethodTextChanged(evt);
+            }
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
 
@@ -120,10 +121,10 @@ public class GPSimulatorGUI extends javax.swing.JFrame {
         serverPort.setText("2947");
         serverPort.setToolTipText("");
         serverPort.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 serverPortInputMethodTextChanged(evt);
+            }
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
 
@@ -251,7 +252,7 @@ public class GPSimulatorGUI extends javax.swing.JFrame {
                     gpsTracker = new Nomadic(ip, port, per, imei, fileT, this);
                     break;
                 case 1:
-                    gpsTracker = new Teltonica(ip, port, per, imei, fileT, this);
+                    gpsTracker = new TK102(ip, port, per, imei, fileT, this);
                     break;
             }
         

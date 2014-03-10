@@ -21,11 +21,11 @@ import java.util.Date;
  *
  * @author Alex
  */
-public class Nomadic extends StandardGPS {
+public class TK102 extends StandardGPS {
 
-    public Nomadic(String address, int port, int period, int code, String file, GPSimulatorGUI sim) {
+    public TK102(String address, int port, int period, int code, String file, GPSimulatorGUI sim) {
         super(address, port, period, code, file, sim);
-        this.modele = "Nomadic";
+        this.modele = "TK-102";
     }
 
     @Override
@@ -36,9 +36,9 @@ public class Nomadic extends StandardGPS {
             this.timeZone = "Europe/Paris";
             this.listen = new ListenThread(socket, this);
             listen.start();
-            InputStream stream = Nomadic.class.getResourceAsStream("/gps/resources/jeu_essai_positions.txt");
-            System.out.println("**** Connexion start - "+this.modele+" GPS****");
+            InputStream stream = TK102.class.getResourceAsStream("/gps/resources/tk102.txt");
             try (Scanner scanner = new Scanner(stream)) {
+               System.out.println("**** Connexion start - "+this.modele+" GPS****");
                String line = null;
                try {
                    while (scanner.hasNextLine()) {
@@ -51,21 +51,14 @@ public class Nomadic extends StandardGPS {
                        }
                        
                        // Format and print Date
-                       Date date = new Date();
-                       TimeZone.setDefault(TimeZone.getTimeZone(timeZone));
-                       String dateString = dateFormat.format(date);
+                       //Date date = new Date();
+                       //TimeZone.setDefault(TimeZone.getTimeZone(timeZone));
+                       //String dateString = dateFormat.format(date);
                        //Show formated Date
-                       System.out.println(dateString);
+                       //System.out.println(dateString);
                        // Read line frome file
                        line = scanner.nextLine();
-                       String[] splits = line.split(",");
-                       System.out.println("Param number : " + splits.length);
-                       // Build trame
-                       String gpsTrame = this.imei + "," + dateString + "," + splits[2]
-                               + "," + splits[3] + "," + splits[4] + "," + splits[5] + ","
-                               + splits[6] + "," + splits[7] + "," + splits[8] + "\r\n";
-                       
-                       // Try to connect to server and send data
+                       String gpsTrame = line + "\n";
                        sendTrame(gpsTrame);
                        stopIsSend();
                        //Sleep

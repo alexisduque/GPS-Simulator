@@ -33,6 +33,7 @@ public class StandardGPS implements Runnable{
     protected ListenThread listen;
     public PrintStream out;
     public String filsBufer;
+    public String modele;
     
     public StandardGPS(){
         Random rand = new Random(); 
@@ -106,9 +107,7 @@ public class StandardGPS implements Runnable{
     }
 
     public void sendTrame(String gpsTrame) {
-
-            
-            System.out.println("**** Connexion start - NomadicGPS****");
+        
             // Send Trame throught socket
             out.println(gpsTrame);
             out.flush();
