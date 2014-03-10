@@ -40,10 +40,12 @@ public class ListenThread extends Thread {
                             testStop();
                             System.out.println("Tracker a reçu: " + _strCommande +"\n");
                             System.out.flush(); // on affiche tout ce qui est en attente dans le flux
-                            try {
-                                gps.filsBufer = "$OK:TRACK=1,5,1,0000\r\n";
-                            } catch (Exception e) {
-                                System.err.println(e);
+                            if (gps.getClass() == Nomadic.class) {
+                                try {
+                                    gps.filsBufer = "$OK:TRACK=1,5,1,0000\r\n";
+                                } catch (Exception e) {
+                                    System.err.println(e);
+                                }
                             }
                         }
                     } catch (IOException e) {

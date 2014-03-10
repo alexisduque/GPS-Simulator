@@ -21,7 +21,7 @@ import java.io.OutputStream;
 import java.util.regex.Pattern;
 
 public class ServerTK102 implements Runnable {
-    
+   
     // Pattern to parse TK102 position frame
     static private Pattern pattern = Pattern.compile(
             "\\[.\\d{10}.\\(\\p{Upper}+"
