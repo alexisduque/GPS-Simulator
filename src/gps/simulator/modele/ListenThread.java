@@ -42,7 +42,7 @@ public class ListenThread extends Thread {
                             System.out.flush(); // on affiche tout ce qui est en attente dans le flux
                             if (gps.getClass() == Nomadic.class) {
                                 try {
-                                    gps.filsBufer = "$OK:TRACK=1,5,1,0000\r\n";
+                                    gps.filsBufer = "$OK:IMEI=352599046696394\r\n";
                                 } catch (Exception e) {
                                     System.err.println(e);
                                 }
